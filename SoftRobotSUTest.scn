@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <Node name="Root" gravity="0 0 0" time="0" animate="0">
-    <RequiredPlugin name="SoftRobotsSU" pluginName="SoftRobotsSU"/>
+    <RequiredPlugin name="SoftRobotSU" pluginName="SoftRobotSU"/>
     <VisualStyle displayFlags="hideVisualModels showBehaviorModels showMappings showForceFields"/>
     <Node name="parent node with independent DOFs">
         <EulerExplicitSolver name="ODE solver"/>

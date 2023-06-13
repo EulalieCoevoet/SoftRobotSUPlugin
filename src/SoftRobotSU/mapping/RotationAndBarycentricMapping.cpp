@@ -19,52 +19,23 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
-#include <SoftRobotsSU/config.h>
+#define SOFTROBOSU_MAPPING_ROTATIONANDBARYCENTRICMAPPING_CPP
 
 #include <sofa/core/ObjectFactory.h>
-using sofa::core::ObjectFactory;
 
-extern "C" {
-    SOFA_SOFTROBOTSSU_API void initExternalModule();
-    SOFA_SOFTROBOTSSU_API const char* getModuleName();
-    SOFA_SOFTROBOTSSU_API const char* getModuleVersion();
-    SOFA_SOFTROBOTSSU_API const char* getModuleLicense();
-    SOFA_SOFTROBOTSSU_API const char* getModuleDescription();
-    SOFA_SOFTROBOTSSU_API const char* getModuleComponentList();
-}
+#include <SoftRobotSU/mapping/RotationAndBarycentricMapping.inl>
 
-void initExternalModule()
+namespace softrobotsu::mapping
 {
-    static bool first = true;
-    if (first)
-    {
-        first = false;
-    }
-}
 
-const char* getModuleName()
-{
-    return sofa_tostring(SOFA_TARGET);
-}
+using namespace sofa::defaulttype;
 
-const char* getModuleVersion()
-{
-    return sofa_tostring(SOFTROBOTSSU_VERSION);
-}
+int RotationAndBarycentricMappingClass = sofa::core::RegisterObject(
+                                                            "Applies a rigid rotation (input2 Vec1) on the rest position of the output (around the given axis) and "
+                                                            "applies a barycentric mapping between input1 and output.")
+    .add< RotationAndBarycentricMapping< Vec3Types, Vec1Types, Vec3Types > >(true)
+;
 
-const char* getModuleLicense()
-{
-    return "LGPL";
-}
+template class RotationAndBarycentricMapping< Vec3Types, Vec1Types, Vec3Types >;
 
-const char* getModuleDescription()
-{
-    return "Simple example of a Sofa plugin.";
-}
-
-const char* getModuleComponentList()
-{
-    /// string containing the names of the classes provided by the plugin
-    static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
-    return classes.c_str();
 }

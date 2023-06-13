@@ -19,22 +19,52 @@
 *                                                                             *
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
+#include <SoftRobotSU/config.h>
 
 #include <sofa/core/ObjectFactory.h>
+using sofa::core::ObjectFactory;
 
-#include <SoftRobotsSU/mapping/RotationAndBarycentricMapping.inl>
+extern "C" {
+    SOFA_SOFTROBOTSU_API void initExternalModule();
+    SOFA_SOFTROBOTSU_API const char* getModuleName();
+    SOFA_SOFTROBOTSU_API const char* getModuleVersion();
+    SOFA_SOFTROBOTSU_API const char* getModuleLicense();
+    SOFA_SOFTROBOTSU_API const char* getModuleDescription();
+    SOFA_SOFTROBOTSU_API const char* getModuleComponentList();
+}
 
-namespace sofa::component::mapping
+void initExternalModule()
 {
+    static bool first = true;
+    if (first)
+    {
+        first = false;
+    }
+}
 
-using namespace sofa::defaulttype;
+const char* getModuleName()
+{
+    return sofa_tostring(SOFA_TARGET);
+}
 
-int RotationAndBarycentricMappingClass = core::RegisterObject(
-                                                            "Applies a rigid rotation (input2 Vec1) on the rest position of the output (around the given axis) and "
-                                                            "applies a barycentric mapping between input1 and output.")
-    .add< RotationAndBarycentricMapping< Vec3Types, Vec1Types, Vec3Types > >(true)
-;
+const char* getModuleVersion()
+{
+    return sofa_tostring(SOFTROBOTSU_VERSION);
+}
 
-template class RotationAndBarycentricMapping< Vec3Types, Vec1Types, Vec3Types >;
+const char* getModuleLicense()
+{
+    return "LGPL";
+}
 
+const char* getModuleDescription()
+{
+    return "Simple example of a Sofa plugin.";
+}
+
+const char* getModuleComponentList()
+{
+    /// string containing the names of the classes provided by the plugin
+    static std::string classes = ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
+    return classes.c_str();
 }

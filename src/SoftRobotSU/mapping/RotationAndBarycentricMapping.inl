@@ -20,38 +20,40 @@
 * Contact information: contact@sofa-framework.org                             *
 ******************************************************************************/
 
-#include <SoftRobotsSU/mapping/RotationAndBarycentricMapping.h>
+#pragma once
+
+#include <SoftRobotSU/mapping/RotationAndBarycentricMapping.h>
 
 #include <sofa/component/topology/container/grid/RegularGridTopology.h>
-#include <SofaBaseTopology/SparseGridTopology.h>
-#include <SofaBaseTopology/EdgeSetTopologyContainer.h>
-#include <SofaBaseTopology/PointSetTopologyContainer.h>
-#include <SofaBaseTopology/TriangleSetTopologyContainer.h>
-#include <SofaBaseTopology/QuadSetTopologyContainer.h>
-#include <SofaBaseTopology/TetrahedronSetTopologyContainer.h>
-#include <SofaBaseTopology/HexahedronSetTopologyContainer.h>
+#include <sofa/component/topology/container/grid/SparseGridTopology.h>
+#include <sofa/component/topology/container/dynamic/EdgeSetTopologyContainer.h>
+#include <sofa/component/topology/container/dynamic/PointSetTopologyContainer.h>
+#include <sofa/component/topology/container/dynamic/TriangleSetTopologyContainer.h>
+#include <sofa/component/topology/container/dynamic/QuadSetTopologyContainer.h>
+#include <sofa/component/topology/container/dynamic/TetrahedronSetTopologyContainer.h>
+#include <sofa/component/topology/container/dynamic/HexahedronSetTopologyContainer.h>
 
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperMeshTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperRegularGridTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperSparseGridTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperEdgeSetTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperTriangleSetTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperQuadSetTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperTetrahedronSetTopology.h>
-#include<SofaBaseMechanics/BarycentricMappers/BarycentricMapperHexahedronSetTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperMeshTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperRegularGridTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperSparseGridTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperEdgeSetTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperTriangleSetTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperQuadSetTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperTetrahedronSetTopology.h>
+#include<sofa/component/mapping/linear/BarycentricMappers/BarycentricMapperHexahedronSetTopology.h>
 
-namespace sofa::component::mapping {
+namespace softrobotsu::mapping {
 
 using sofa::component::topology::container::grid::RegularGridTopology;
 using sofa::core::objectmodel::ComponentState;
-using topology::HexahedronSetTopologyContainer;
-using topology::TetrahedronSetTopologyContainer;
-using topology::QuadSetTopologyContainer;
-using topology::TriangleSetTopologyContainer;
-using topology::EdgeSetTopologyContainer;
-using topology::PointSetTopologyContainer;
-using helper::WriteAccessor;
-using helper::ReadAccessor;
+using sofa::component::topology::container::dynamic::HexahedronSetTopologyContainer;
+using sofa::component::topology::container::dynamic::TetrahedronSetTopologyContainer;
+using sofa::component::topology::container::dynamic::QuadSetTopologyContainer;
+using sofa::component::topology::container::dynamic::TriangleSetTopologyContainer;
+using sofa::component::topology::container::dynamic::EdgeSetTopologyContainer;
+using sofa::component::topology::container::dynamic::PointSetTopologyContainer;
+using sofa::helper::WriteAccessor;
+using sofa::helper::ReadAccessor;
 
 using sofa::core::objectmodel::New;
 
@@ -68,8 +70,8 @@ RotationAndBarycentricMapping<In1, In2, Out>::RotationAndBarycentricMapping()
     , d_topologyFEM(initLink("topologyFEM", ""))
     , d_topologyCollision(initLink("topologyCollision", ""))
 {
-    WriteAccessor<Data<vector<Vec3>>> axis = d_axis;
-    WriteAccessor<Data<vector<Vec3>>> center = d_center;
+    WriteAccessor<sofa::Data<vector<Vec3>>> axis = d_axis;
+    WriteAccessor<sofa::Data<vector<Vec3>>> center = d_center;
     axis.resize(1);
     axis[0] = Vec3(1,0,0);
     center.resize(1);
@@ -98,8 +100,8 @@ void RotationAndBarycentricMapping<In1, In2, Out>::init()
         return;
     }
 
-    m_mapper->init(((const core::State<Out> *)toModels[0])->read(core::ConstVecCoordId::restPosition())->getValue(),
-                   ((const core::State<In1> *)fromModels1[0])->read(core::ConstVecCoordId::restPosition())->getValue());
+    m_mapper->init(((const sofa::core::State<Out> *)toModels[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue(),
+                   ((const sofa::core::State<In1> *)fromModels1[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue());
 
     d_componentState.setValue(ComponentState::Valid) ;
 }
@@ -109,8 +111,8 @@ void RotationAndBarycentricMapping<In1, In2, Out>::reinit()
 {
     if(m_mapper){
         m_mapper->clear();
-        m_mapper->init(((const core::State<Out> *)toModels[0])->read(core::ConstVecCoordId::restPosition())->getValue(),
-                       ((const core::State<In1> *)fromModels1[0])->read(core::ConstVecCoordId::restPosition())->getValue());
+        m_mapper->init(((const sofa::core::State<Out> *)toModels[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue(),
+                       ((const sofa::core::State<In1> *)fromModels1[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue());
     }
 }
 
@@ -120,8 +122,8 @@ void RotationAndBarycentricMapping<In1, In2, Out>::handleTopologyChange (Topolog
     // Foward topological modifications to the mapper
     if (m_mapper.get()){
         m_mapper->processTopologicalChanges(
-                                            ((const core::State<Out> *)this->toModels[0])->read(core::ConstVecCoordId::restPosition())->getValue(),
-                                            ((const core::State<In1> *)this->fromModels1[0])->read(core::ConstVecCoordId::restPosition())->getValue(),
+                                            ((const sofa::core::State<Out> *)this->toModels[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue(),
+                                            ((const sofa::core::State<In1> *)this->fromModels1[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue(),
                                             t);
     }
 }
@@ -153,16 +155,16 @@ void RotationAndBarycentricMapping<In1, In2, Out>::createMapperFromTopology()
 {
     using sofa::core::behavior::BaseMechanicalState;
     using sofa::core::topology::TopologyContainer;
-    using sofa::component::topology::SparseGridTopology;
+    using sofa::component::topology::container::grid::SparseGridTopology;
 
-    using RegularGridMapper = BarycentricMapperRegularGridTopology< In1, Out >;
-    using SparseGridMapper = BarycentricMapperSparseGridTopology< In1, Out >;
-    using MeshMapper = BarycentricMapperMeshTopology< In1, Out >;
-    using HexahedronSetMapper = BarycentricMapperHexahedronSetTopology<In1, Out>;
-    using TetrahedronSetMapper = BarycentricMapperTetrahedronSetTopology<In1, Out>;
-    using QuadSetMapper = BarycentricMapperQuadSetTopology<In1, Out>;
-    using TriangleSetMapper = BarycentricMapperTriangleSetTopology<In1, Out>;
-    using EdgeSetMapper = BarycentricMapperEdgeSetTopology<In1, Out>;
+    using RegularGridMapper = sofa::component::mapping::linear::BarycentricMapperRegularGridTopology< In1, Out >;
+    using SparseGridMapper = sofa::component::mapping::linear::BarycentricMapperSparseGridTopology< In1, Out >;
+    using MeshMapper = sofa::component::mapping::linear::BarycentricMapperMeshTopology< In1, Out >;
+    using HexahedronSetMapper = sofa::component::mapping::linear::BarycentricMapperHexahedronSetTopology<In1, Out>;
+    using TetrahedronSetMapper = sofa::component::mapping::linear::BarycentricMapperTetrahedronSetTopology<In1, Out>;
+    using QuadSetMapper = sofa::component::mapping::linear::BarycentricMapperQuadSetTopology<In1, Out>;
+    using TriangleSetMapper = sofa::component::mapping::linear::BarycentricMapperTriangleSetTopology<In1, Out>;
+    using EdgeSetMapper = sofa::component::mapping::linear::BarycentricMapperEdgeSetTopology<In1, Out>;
 
     auto topologyFEM = d_topologyFEM.get();
     auto topologyCollision = dynamic_cast<PointSetTopologyContainer*> (d_topologyCollision.get());
@@ -238,19 +240,19 @@ end:
 
 template <class In1, class In2, class Out>
 void RotationAndBarycentricMapping<In1, In2, Out>::apply(
-                                                        const MechanicalParams* mparams, const vector<Data<typename Out::VecCoord>*>& dataVecOutPos,
-                                                        const vector<const Data<typename In1::VecCoord>*>& dataVecIn1Pos,
-                                                        const vector<const Data<typename In2::VecCoord>*>& dataVecIn2Pos)
+                                                        const MechanicalParams* mparams, const vector<sofa::Data<typename Out::VecCoord>*>& dataVecOutPos,
+                                                        const vector<const sofa::Data<typename In1::VecCoord>*>& dataVecIn1Pos,
+                                                        const vector<const sofa::Data<typename In2::VecCoord>*>& dataVecIn2Pos)
 {
     SOFA_UNUSED(mparams);
 
     if(m_mapper == nullptr)
         return;
 
-    const Data<typename In1::VecCoord>* in1 = dataVecIn1Pos[0];
-    const Data<typename In2::VecCoord>* in2 = dataVecIn2Pos[0];
-    WriteAccessor<Data<typename Out::VecCoord>> out = *dataVecOutPos[0];
-    WriteAccessor<Data<typename Out::VecCoord>> outRest = *((core::State<Out> *)toModels[0])->write(core::VecCoordId::restPosition());
+    const sofa::Data<typename In1::VecCoord>* in1 = dataVecIn1Pos[0];
+    const sofa::Data<typename In2::VecCoord>* in2 = dataVecIn2Pos[0];
+    WriteAccessor<sofa::Data<typename Out::VecCoord>> out = *dataVecOutPos[0];
+    WriteAccessor<sofa::Data<typename Out::VecCoord>> outRest = *((sofa::core::State<Out> *)toModels[0])->write(sofa::core::VecCoordId::restPosition());
 
     // Store position before rotation, for velocities
     m_mapper->resize(toModels[0]);
@@ -286,9 +288,9 @@ void RotationAndBarycentricMapping<In1, In2, Out>::apply(
 
 template <class In1, class In2, class Out>
 void RotationAndBarycentricMapping<In1, In2, Out>::applyJ(
-                                                        const MechanicalParams* mparams, const vector<Data<typename Out::VecDeriv>*>& dataVecOutVel,
-                                                        const vector<const Data<typename In1::VecDeriv>*>& dataVecIn1Vel,
-                                                        const vector<const Data<typename In2::VecDeriv>*>& dataVecIn2Vel)
+                                                        const MechanicalParams* mparams, const vector<sofa::Data<typename Out::VecDeriv>*>& dataVecOutVel,
+                                                        const vector<const sofa::Data<typename In1::VecDeriv>*>& dataVecIn1Vel,
+                                                        const vector<const sofa::Data<typename In2::VecDeriv>*>& dataVecIn2Vel)
 {
     SOFA_UNUSED(mparams);
     SOFA_UNUSED(dataVecIn2Vel);
@@ -296,10 +298,10 @@ void RotationAndBarycentricMapping<In1, In2, Out>::applyJ(
     if(m_mapper == nullptr)
         return;
 
-    const Data<typename In1::VecDeriv>* in1Vel = dataVecIn1Vel[0];
-    const typename In2::VecCoord& in2Pos = ((core::State<In2> *)fromModels2[0])->read(core::ConstVecCoordId::position())->getValue();
-    WriteAccessor<Data<typename Out::VecDeriv>> outVel = *dataVecOutVel[0];
-    const typename Out::VecCoord& outRestPos = ((core::State<Out> *)toModels[0])->read(core::ConstVecCoordId::restPosition())->getValue();
+    const sofa::Data<typename In1::VecDeriv>* in1Vel = dataVecIn1Vel[0];
+    const typename In2::VecCoord& in2Pos = ((sofa::core::State<In2> *)fromModels2[0])->read(sofa::core::ConstVecCoordId::position())->getValue();
+    WriteAccessor<sofa::Data<typename Out::VecDeriv>> outVel = *dataVecOutVel[0];
+    const typename Out::VecCoord& outRestPos = ((sofa::core::State<Out> *)toModels[0])->read(sofa::core::ConstVecCoordId::restPosition())->getValue();
 
     // Apply FEM velocities
     m_mapper->applyJ(outVel.wref(), in1Vel->getValue());
@@ -324,9 +326,9 @@ void RotationAndBarycentricMapping<In1, In2, Out>::applyJ(
 
 template <class In1, class In2, class Out>
 void RotationAndBarycentricMapping<In1, In2, Out>::applyJT(
-                                                        const MechanicalParams* mparams, const vector<Data<typename In1::VecDeriv>*>& dataVecOut1Force,
-                                                        const vector< Data<typename In2::VecDeriv>*>& dataVecOut2Force,
-                                                        const vector<const Data<typename Out::VecDeriv>*>& dataVecInForce)
+                                                        const MechanicalParams* mparams, const vector<sofa::Data<typename In1::VecDeriv>*>& dataVecOut1Force,
+                                                        const vector< sofa::Data<typename In2::VecDeriv>*>& dataVecOut2Force,
+                                                        const vector<const sofa::Data<typename Out::VecDeriv>*>& dataVecInForce)
 {
     SOFA_UNUSED(mparams);
     SOFA_UNUSED(dataVecOut2Force);
@@ -334,15 +336,15 @@ void RotationAndBarycentricMapping<In1, In2, Out>::applyJT(
     if(m_mapper == nullptr)
         return;
 
-    const Data<typename Out::VecDeriv>* in = dataVecInForce[0];
-    WriteAccessor<Data<typename In1::VecDeriv>> out1 = *dataVecOut1Force[0];
+    const sofa::Data<typename Out::VecDeriv>* in = dataVecInForce[0];
+    WriteAccessor<sofa::Data<typename In1::VecDeriv>> out1 = *dataVecOut1Force[0];
     m_mapper->applyJT(out1.wref(), in->getValue());
 }
 
 template <class In1, class In2, class Out>
-void RotationAndBarycentricMapping<In1, In2, Out>::applyJT(const ConstraintParams* cparams, const vector<Data<typename In1::MatrixDeriv>*>& dataMatOut1 ,
-                                                        const vector< Data<typename In2::MatrixDeriv>*>&  dataMatOut2 ,
-                                                        const vector<const Data<typename Out::MatrixDeriv>*>& dataMatIn)
+void RotationAndBarycentricMapping<In1, In2, Out>::applyJT(const ConstraintParams* cparams, const vector<sofa::Data<typename In1::MatrixDeriv>*>& dataMatOut1 ,
+                                                        const vector< sofa::Data<typename In2::MatrixDeriv>*>&  dataMatOut2 ,
+                                                        const vector<const sofa::Data<typename Out::MatrixDeriv>*>& dataMatIn)
 {
     SOFA_UNUSED(cparams);
     SOFA_UNUSED(dataMatOut2);
@@ -350,8 +352,8 @@ void RotationAndBarycentricMapping<In1, In2, Out>::applyJT(const ConstraintParam
     if(m_mapper == nullptr)
         return;
 
-    const Data<typename Out::MatrixDeriv>* in = dataMatIn[0];
-    WriteAccessor<Data<typename In1::MatrixDeriv>> out1 = *dataMatOut1[0];
+    const sofa::Data<typename Out::MatrixDeriv>* in = dataMatIn[0];
+    WriteAccessor<sofa::Data<typename In1::MatrixDeriv>> out1 = *dataMatOut1[0];
     m_mapper->applyJT(out1.wref(), in->getValue());
 }
 
